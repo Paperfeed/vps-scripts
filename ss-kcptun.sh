@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# wget --no-check-certificate -O ss-kcptun.sh https://raw.githubusercontent.com/Paperfeed/vps-scripts/master/ss-kcptun.sh && chmod +x ss-kcptun.sh && ./ss-kcptun.sh
+
 check_sys(){
     local checkType=$1
     local value=$2
@@ -45,17 +47,27 @@ check_sys(){
     fi
 }
 
-$systemPackage install expect
+if [ yum list installed expect >/dev/null 2>&1] || [ $(dpkg-query -W -f='${Status}' expect 2>/dev/null | grep -c "ok installed") -eq 0 ];  then
+    echo "Expect already installed, skipping installation
+else
+    if [ $systemPackage == "yum" ]; then
+        yum install expect
+    else 
+       apt install expect
+    fi
+fi
+
 read -p "Set Password: " PWD
 
-
 # Get ShadowSocks & KCPTUN Installation Script
-wget --no-check-certificate -O shadowsocks-go.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-go.sh
-wget --no-check-certificate https://github.com/kuoruan/shell-scripts/raw/master/kcptun/kcptun.sh
-chmod +x shadowsocks-go.sh
-chmod +x ./kcptun.sh
-#./shadowsocks-go.sh 2>&1 | tee shadowsocks-go.log
-#./kcptun.sh
+if [ ! -e "./shadowsocks-go.sh" ]; then
+    wget --no-check-certificate -O shadowsocks-go.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-go.sh
+    wget --no-check-certificate https://github.com/kuoruan/shell-scripts/raw/master/kcptun/kcptun.sh
+    chmod +x shadowsocks-go.sh
+    chmod +x ./kcptun.sh
+fi 
+
+
 
 # Expect
 /usr/bin/expect <<EOD
