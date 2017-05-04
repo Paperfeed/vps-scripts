@@ -48,16 +48,17 @@ check_sys(){
 }
 
 if [ yum list installed expect >/dev/null 2>&1] || [ $(dpkg-query -W -f='${Status}' expect 2>/dev/null | grep -c "ok installed") -eq 0 ];  then
-    echo "Expect already installed, skipping installation
+    echo "Expect already installed, skipping installation"
 else
+    echo "Installing Expect"
     if [ $systemPackage == "yum" ]; then
         yum install expect
     else 
        apt install expect
     fi
 fi
-
-read -p "Set Password: " PWD
+echo "Please input a password for your SS-KCPTUN setup"
+read -p "Password: " PWD
 
 # Get ShadowSocks & KCPTUN Installation Script
 if [ ! -e "./shadowsocks-go.sh" ]; then
