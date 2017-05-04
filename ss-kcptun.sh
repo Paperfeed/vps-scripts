@@ -72,7 +72,7 @@ fi
 
 # Expect
 /usr/bin/expect <<EOD
-spawn ./shadowsocks-go.sh 2>&1 | tee shadowsocks-go.log
+spawn ./shadowsocks-go.sh
 expect "(Default password: teddysun.com):"
 send "$PWD\n"
 expect "(Default port: 8989):"
@@ -82,7 +82,7 @@ echo "you're out"
 
 # Expect 
 #/usr/bin/expect <<EOD
-spawn ./kcptun.sh 2>&1 | tee kcptun.log
+spawn ./kcptun.sh
 expect "(默认: ${listen_port}): "
 send "\n" 
 expect "(默认: ${target_addr}): "
